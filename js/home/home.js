@@ -12,7 +12,7 @@ angular.module('myApp')
 
         var fb = new Firebase("https://thehomeapp.firebaseio.com/");
 
-        fb.child("events").on("value", function (snapshot) {
+        fb.child("events").once("value", function (snapshot) {
             var object = snapshot.val();
             for(key in object){
                 var event = object[key];
@@ -29,7 +29,7 @@ angular.module('myApp')
             var newEvent = {
               title: homeVm.title + ' ' + homeVm.price,
               price: homeVm.price,
-              start: homeVm.date == null ? new Date() : homeVm.date
+              start: homeVm.date == null ? new Date().toString() : homeVm.date.toString()
             };
             $scope.events.push(newEvent);
             homeVm.currentBalance = homeVm.calculateBalance();
