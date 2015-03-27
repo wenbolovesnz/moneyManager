@@ -1,50 +1,63 @@
 angular.module('myApp')
     .controller('HomeController', ['$scope', function($scope){
         var homeVm = this;
+        homeVm.total = 5000;
 
-        var date = new Date();
-        var d = date.getDate();
-        var m = date.getMonth();
-        var y = date.getFullYear();
-
-        homeVm.eventSource = {
+        $scope.events = [
+        ];
+        $scope.eventSource = {
             url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic"
         };
+        $scope.eventSources = [];
 
-        homeVm.events = [
-        ];
+        var fb = new Firebase("https://thehomeapp.firebaseio.com/");
 
+        fb.child("events").on("value", function (snapshot) {
+            var object = snapshot.val();
+            for(key in object){
+                var event = object[key];
+                event.start = new Date(event.start);
+                $scope.events.push(event);
+            }
+
+            homeVm.currentBalance = homeVm.calculateBalance();
+            $scope.$apply();
+        });
+
+        homeVm.eventSources= [$scope.events, $scope.eventSource];
         homeVm.saveEvent = function(){
             var newEvent = {
               title: homeVm.title + ' ' + homeVm.price,
               price: homeVm.price,
               start: homeVm.date == null ? new Date() : homeVm.date
             };
-
-            homeVm.events.push(newEvent);
+            $scope.events.push(newEvent);
             homeVm.currentBalance = homeVm.calculateBalance();
+            fb.child("events").push(newEvent);
+            homeVm.title = '';
+            homeVm.price = null;
+            homeVm.date = null;
+            homeVm.repeatFor = null;
+            homeVm.repeatTimes = null;
         };
 
         homeVm.calculateBalance = function(){
 
             var getAllPrices = R.map(function(event){
-                return event.price;
+                return parseInt(event.price);
             });
 
             var total = R.pipe(getAllPrices, R.sum);
 
-            var balance = homeVm.total - total(homeVm.events);
+            var balance = homeVm.total - total($scope.events);
 
             return balance;
 
         };
 
-        homeVm.total = 5000;
-        homeVm.currentBalance = homeVm.calculateBalance();
 
 
 
 
-        homeVm.eventSources= [homeVm.events, homeVm.eventSource];
 
     }]);
