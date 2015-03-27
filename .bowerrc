@@ -1,0 +1,5 @@
+{
+  "directory": "bower_components",
+  "proxy":"http://icecrown:5865",
+  "https-proxy":"http://icecrown:5865"
+}

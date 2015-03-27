@@ -1,0 +1,45 @@
+<div ng-controller="HomeController as homeVm">
+    <div class="row">
+        <div ui-calendar ng-model="homeVm.eventSources" class="col-md-7"></div>
+        <div class="col-md-5 summary">
+            <h3>Month Summary</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>Total income: {{homeVm.total }}</p>
+                    <p ng-repeat="event in homeVm.events"> {{event.title}}</p>
+                    <p>Current Balance: {{homeVm.currentBalance}}</p>
+
+
+                </div>
+                <div class="col-md-6">
+                    <h4>Add new cost event</h4>
+                    <form ng-submit="homeVm.saveEvent()">
+                        <div class="form-group">
+                            <label for="title">What</label>
+                            <input type="text" class="form-control" id="title" placeholder="What is it for" ng-model="homeVm.title">
+                        </div>
+                        <div class="form-group">
+                            <label for="price">How much</label>
+                            <input type="text" class="form-control" id="price" placeholder="How much it cost" ng-model="homeVm.price">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" class="form-control" id="date" placeholder="Date" ng-model="homeVm.date">
+                        </div>
+                        <div class="form-group">
+                            <label for="repeatFor">repeat</label>
+                            <input type="text" class="form-control" id="repeatFor" placeholder="month or week" ng-model="homeVm.repeatFor">
+                        </div>
+                        <div class="form-group">
+                            <label for="repeatTime">repeat</label>
+                            <input type="text" class="form-control" id="repeatTime" placeholder="how many time repeat it for" ng-model="homeVm.repeatTimes">
+                        </div>
+                        <button class="btn btn-info">Save</button>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
